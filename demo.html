@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Demo asistente IA · Qimbia Tech</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --azul: #1f2940;
+      --morado: #7c3aed;
+      --gris: #4b5563;
+      --fondo: #f5f5f7;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, sans-serif;
+      background: var(--fondo);
+      color: var(--azul);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+    .chat-shell {
+      width: 100%;
+      max-width: 420px;
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 16px 40px rgba(15,23,42,0.18);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .chat-header {
+      padding: 1rem 1.25rem;
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .chat-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: var(--azul);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+    }
+    .chat-header div span {
+      display: block;
+    }
+    .chat-title {
+      font-size: 0.98rem;
+      font-weight: 600;
+    }
+    .chat-subtitle {
+      font-size: 0.78rem;
+      color: var(--gris);
+    }
+    .chat-messages {
+      flex: 1;
+      padding: 1rem 1.25rem;
+      overflow-y: auto;
+      background: #f9fafb;
+    }
+    .msg {
+      max-width: 80%;
+      padding: 0.55rem 0.8rem;
+      border-radius: 14px;
+      margin-bottom: 0.6rem;
+      font-size: 0.9rem;
+      line-height: 1.35;
+    }
+    .msg.bot {
+      background: white;
+      color: var(--azul);
+      border: 1px solid #e5e7eb;
+    }
+    .msg.user {
+      background: var(--morado);
+      color: white;
+      margin-left: auto;
+    }
+    .chat-input {
+      display: flex;
+      border-top: 1px solid #e5e7eb;
+      background: white;
+    }
+    .chat-input input {
+      flex: 1;
+      border: none;
+      padding: 0.75rem 0.9rem;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    .chat-input button {
+      border: none;
+      background: var(--azul);
+      color: white;
+      padding: 0 1.2rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .chat-input button:disabled {
+      opacity: 0.7;
+      cursor: default;
+    }
+    .hint {
+      font-size: 0.8rem;
+      color: var(--gris);
+      padding: 0.5rem 1.25rem 0.75rem;
+      background: white;
+      border-top: 1px solid #e5e7eb;
+    }
+    .back-link {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      font-size: 0.85rem;
+    }
+    .back-link a {
+      text-decoration: none;
+      color: var(--gris);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="back-link">
+    <a href="index.html">← Volver a Qimbia Tech</a>
+  </div>
+
+  <div class="chat-shell">
+    <div class="chat-header">
+      <div class="chat-logo">Q</div>
+      <div>
+        <span class="chat-title">Asistente demo · Clínica dental</span>
+        <span class="chat-subtitle">Ejemplo creado por Qimbia Tech</span>
+      </div>
+    </div>
+
+    <div class="chat-messages" id="messages">
+      <div class="msg bot">
+        ¡Hola! 👋 Soy el asistente virtual de una clínica dental ficticia.<br>
+        Pregúntame por horarios, tratamientos o si trabajamos con tu seguro.
+      </div>
+    </div>
+
+    <form class="chat-input" id="chat-form">
+      <input id="message-input" type="text" placeholder="Escribe tu pregunta..." autocomplete="off" />
+      <button type="submit">Enviar</button>
+    </form>
+    <div class="hint">
+      Ejemplos: “¿Qué horario tenéis?”, “¿Hacéis implantes?”, “¿Aceptáis Adeslas?”
+    </div>
+  </div>
+
+  <script>
+    const API_URL = "http://127.0.0.1:8000/chat"; 
+    // MÁS ADELANTE: cambia esto por tu backend desplegado, ej:
+    // const API_URL = "https://tu-backend.onrender.com/chat";
+
+    const form = document.getElementById("chat-form");
+    const input = document.getElementById("message-input");
+    const messagesEl = document.getElementById("messages");
+
+    function addMessage(text, from) {
+      const div = document.createElement("div");
+      div.classList.add("msg", from);
+      div.innerHTML = text;
+      messagesEl.appendChild(div);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const text = input.value.trim();
+      if (!text) return;
+
+      addMessage(text, "user");
+      input.value = "";
+      input.focus();
+
+      const button = form.querySelector("button");
+      button.disabled = true;
+      button.textContent = "…";
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text }),
+        });
+
+        if (!res.ok) {
+          throw new Error("Error HTTP");
+        }
+
+        const data = await res.json();
+        addMessage(data.reply || "Ha ocurrido un error al generar la respuesta.", "bot");
+      } catch (err) {
+        console.error(err);
+        addMessage(
+          "No he podido conectar con el servidor de la demo. " +
+          "Si estás viéndolo en casa, esto es normal si el servidor no está encendido.",
+          "bot"
+        );
+      } finally {
+        button.disabled = false;
+        button.textContent = "Enviar";
+      }
+    });
+  </script>
+</body>
+</html>
