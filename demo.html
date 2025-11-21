@@ -97,8 +97,11 @@
   </div>
 
   <script>
-    // 👉 Aquí enlazamos con tu backend FastAPI local
-    const API_URL = "http://127.0.0.1:8000/chat";
+    // 👉 Aquí enlazamos con tu backend FastAPI local:
+    //const API_URL = "http://127.0.0.1:8000/chat";
+    //Con esto ahora enlazamos con el repo de git en Render:
+    const API_URL = "https://qimbia-backend.onrender.com";
+
 
     const form = document.getElementById("chat-form");
     const input = document.getElementById("message-input");
