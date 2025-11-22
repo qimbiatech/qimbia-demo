@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
-      --azul: ##283554;    /* azul profundo */
+      --azul: #283554;    /* azul profundo (corregido, solo un #) */
       --morado: #9775E0;  /* violeta tech */
       --gris: #4b5563;    /* gris elegante */
       --fondo: #f5f5f7;
@@ -26,7 +26,7 @@
     .wrapper {
       max-width: 960px;
       width: 100%;
-      padding: 2rem 1.5rem;
+      padding: 2rem 1.5rem 3rem;
     }
     header {
       display: flex;
@@ -114,14 +114,23 @@
       font-size: 1.2rem;
     }
     .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       border-radius: 999px;
       padding: 0.8rem 1.2rem;
       border: 1px solid #e5e7eb;
       background: white;
       color: var(--morado);
+      font-weight: 500;
       font-size: 0.9rem;
       margin-left: 0.75rem;
       text-decoration: none;
+      cursor: pointer;
+    }
+    .btn-secondary:hover {
+      background: #f3f0ff;
+      border-color: #ddd6fe;
     }
     .chip {
       font-size: 0.8rem;
@@ -134,6 +143,7 @@
       border-radius: 18px;
       padding: 1.5rem;
       box-shadow: 0 14px 40px rgba(15,23,42,0.12);
+      border: 1px solid #e5e7eb;
     }
     .card h2 {
       margin-top: 0;
@@ -144,15 +154,63 @@
     }
     .step {
       margin-bottom: 0.9rem;
+      font-size: 0.9rem;
+      color: var(--gris);
     }
     .step strong {
       display: block;
       margin-bottom: 0.1rem;
+      color: var(--azul);
     }
+
+    /* Sección extra para que la web se vea más completa */
+    .features {
+      margin-top: 3rem;
+    }
+    .features h2 {
+      font-size: 1.4rem;
+      margin-bottom: 0.75rem;
+    }
+    .features p.lead {
+      margin: 0 0 1.5rem;
+      color: var(--gris);
+      font-size: 0.95rem;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.2rem;
+    }
+    @media (max-width: 780px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .feature {
+      background: white;
+      border-radius: 14px;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e5e7eb;
+      font-size: 0.9rem;
+    }
+    .feature-title {
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+      color: var(--azul);
+    }
+    .feature small {
+      display: block;
+      margin-top: 0.4rem;
+      font-size: 0.8rem;
+      color: var(--gris);
+    }
+
     footer {
       margin-top: 2.5rem;
       font-size: 0.8rem;
       color: var(--gris);
+      border-top: 1px solid #e5e7eb;
+      padding-top: 1rem;
     }
   </style>
 </head>
@@ -165,6 +223,7 @@
       </div>
       <nav>
         <a href="#como-funciona">Cómo funciona</a>
+        <a href="#servicios">Servicios</a>
         <a href="demo.html">Ver demo</a>
       </nav>
     </header>
@@ -186,11 +245,7 @@
           <a class="btn-primary" href="demo.html">
             Probar demo en 30 segundos <span>→</span>
           </a>
-<<<<<<< HEAD
-          <a class="btn-secondary" href="mailto:qimbiatech.com">
-=======
           <a class="btn-secondary" href="mailto:qimbiatech@gmail.com">
->>>>>>> 1e8f43c259b0f16e25fe57545f6bfa2ef3b19d31
             Solicitar más información
           </a>
         </div>
@@ -217,9 +272,38 @@
       </div>
     </section>
 
+    <section class="features" id="servicios">
+      <h2>Qué hacemos por tu empresa</h2>
+      <p class="lead">
+        Te acompañamos desde la idea hasta la puesta en marcha, sin tecnicismos ni complicaciones.
+      </p>
+      <div class="features-grid">
+        <div class="feature">
+          <div class="feature-title">Asistentes entrenados con tu negocio</div>
+          Creamos un asistente que “conoce” tus servicios, horarios, condiciones y tono de comunicación,
+          para que responda como lo harías tú.
+          <small>Ideal para webs, clínicas, academias, tiendas y servicios profesionales.</small>
+        </div>
+        <div class="feature">
+          <div class="feature-title">Integración sencilla en tu web</div>
+          Integramos el asistente en tu página actual o podemos ayudarte a crear una web sencilla desde cero.
+          Tú solo ves un botón de chat funcionando.
+          <small>Sin instalaciones raras ni cambios en tu infraestructura.</small>
+        </div>
+        <div class="feature">
+          <div class="feature-title">Mantenimiento y mejora continua</div>
+          Revisamos el funcionamiento, actualizamos la base de conocimiento y ajustamos el asistente según
+          el feedback de tus clientes.
+          <small>Planes mensuales adaptados al tamaño de tu empresa.</small>
+        </div>
+      </div>
+    </section>
+
     <footer>
-      © 2025 Qimbia Tech · IA práctica para PYMES · Contacto: qimbiatech@gmail.com
+      © 2025 Qimbia Tech · IA práctica para PYMES · Contacto:
+      <a href="mailto:qimbiatech@gmail.com">qimbiatech@gmail.com</a>
     </footer>
   </div>
 </body>
 </html>
+
